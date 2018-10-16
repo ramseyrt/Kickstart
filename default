@@ -1,3 +1,5 @@
+# PXE Boot configuration file
+# Rob Ramsey, 16 Oct 2018
 default menu.c32
 prompt 0
 timeout 300
