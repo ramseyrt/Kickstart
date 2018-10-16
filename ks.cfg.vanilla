@@ -15,7 +15,6 @@
 install
 
 # Set language to use during install and the default to use on the installed system
-#lang en_US
 lang en_US.UTF-8
 
 # Keyboard layouts
@@ -39,9 +38,10 @@ auth  --useshadow  --passalgo=sha512
 
 # Use graphical install (default behavior)
 graphical
-
 # Use text mode install
 #text
+
+# Determines if you get the post-install first boot screen
 firstboot --disable
 
 # SELinux configuration
@@ -72,7 +72,6 @@ logvol / --fstype xfs --name=lv01 --vgname=rootvg01 --size=1 --grow
 
 %packages
 @^Server with GUI
-#@^graphical-server-environment
 %end # End of %packages secton
 
 %addon com_redhat_kdump --disable
