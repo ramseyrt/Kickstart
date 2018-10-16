@@ -5,7 +5,7 @@ prompt 0
 timeout 300
 ONTIMEOUT local
 
-MENU TITLE Gandalf Kickstart PXE Menu
+MENU TITLE Kickstart PXE Menu
 
 LABEL 1
 MENU LABEL ^1) Install RHEL 7.4 64Bit (STIG)
