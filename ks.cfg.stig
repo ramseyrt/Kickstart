@@ -106,7 +106,7 @@ logvol /var/log/audit --fstype=xfs --name=lv06 --vgname=VolGroup --size=256 --fs
 logvol swap --name=lv_swap --vgname=VolGroup --size=2048
 
 %packages
-@^graphical-server-environment
+@^Server with GUI
 # CCE-27024-9: Install AIDE
 aide
 # Install OpenSCAP security configuration and auditing tool
