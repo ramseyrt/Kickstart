@@ -7,7 +7,7 @@
 # Rob Ramsey 18 Sep 2018
 ################################################################
 
-# Check to make sure there are no arguments
+# Check user input to make sure there are no arguments.  If so, give usage.
 if [ ! $# = 0 ]
 	then
 		echo "Invalid argument"
@@ -21,11 +21,11 @@ fi
 # Create a random eight character alphabetical string for use as salt
 Salt=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 8 | head -n 1)
 
-# This version of the python code prompts the user for salt then clear text password
+# This version of the python code prompts the user for salt then cleartext password
 #python -c "import crypt, getpass, pwd; print crypt.crypt(raw_input(), '\$6\$' + raw_input() + '\$')"
 
-# This version of the python code takes the clear text password as an argument to the script
-# and uses a hard coded salt
+# This version of the python code takes the cleartext password as an argument to the script
+# and uses a hard coded salt ($SaltSalt)
 #python -c "import crypt, getpass, pwd; print(crypt.crypt('$Argument', '\$6\$SaltSalt\$'))"
 
 # This version of the python code uses randome salt, generated above, and prompts the user for their
