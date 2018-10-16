@@ -1,34 +1,48 @@
 # PXE Boot configuration file
 # Rob Ramsey, 16 Oct 2018
 UI menu.c32
+# Default boot menu option setting
 default 4
 prompt 0
+# Timeout is measured in 1/10 of a second
 timeout 50
+# On timeout boot menu option specified
 ONTIMEOUT 4
 
+# PXE Boot menu
 MENU TITLE Gandalf Kickstart PXE Menu
 
+# Menu option
 LABEL 1
+# Menu option flavor text
 MENU LABEL ^1) Install RHEL 7.4 64Bit (STIG)
 KERNEL /netboot/vmlinuz
 APPEND initrd=/netboot/initrd.img ksdevice=bootif method=ftp://192.168.3.20/pub/rhel-7.4-media ks=ftp://192.168.3.20/pub/rhel-7.4-media/ks.cfg.stig ip=dhcp
+# Following entry is for NFS vs. FTP
 # APPEND initrd=/netboot/initrd.img ksdevice=bootif method=nfs:192.168.3.20:/nfs_share/rhel-7.4-media ks=nfs:192.168.3.20:/nfs_share/rhel-7.4-media/ks.cfg.stig ip=dhcp
 IPAPPEND 2
 
+# Menu option
 LABEL 2
+# Menu option flavor text
 MENU LABEL ^2) Install RHEL 7.4 64Bit (Vanilla)
 KERNEL /netboot/vmlinuz
 APPEND initrd=/netboot/initrd.img ksdevice=bootif method=ftp://192.168.3.20/pub/rhel-7.4-media ks=ftp://192.168.3.20/pub/rhel-7.4-media/ks.cfg.vanilla ip=dhcp
+# Following entry is for NFS vs. FTP
 # APPEND initrd=/netboot/initrd.img ksdevice=bootif method=nfs:192.168.3.20:/nfs_share/rhel-7.4-media ks=nfs:192.168.3.20:/nfs_share/rhel-7.4-media/ks.cfg.vanilla ip=dhcp
 IPAPPEND 2
 
+# Menu option
 LABEL 3
+# Menu option flavor text
 MENU LABEL ^3) Boot RHEL 7.4 64Bit Recovery Mode
 KERNEL /netboot/vmlinuz
 APPEND initrd=/netboot/initrd.img rescue ksdevice=bootif method=ftp://192.168.3.20/pub/rhel-7.4-media ip=dhcp
 IPAPPEND 2
 
+# Menu option
 LABEL 4
+# Menu option flavor text
 MENU LABEL ^4) Boot Local Disk
 localboot 0xffff
 
