@@ -1,0 +1,189 @@
+#1234567890123456789012345678901234567890123456789012345678901234567890123456789
+################################################################################
+# ks.cfg.stig
+#
+# RHEL 7.4 Kickstart installation script that builds clients with a graphical
+# desktop. This version of the script also includes DISA STIG hardening.
+#
+# Rob Ramsey, 15 Oct 2018  
+#
+################################################################################
+#platform=x86, AMD64, or Intel EM64T
+#version=DEVEL
+# Install OS instead of upgrade
+install
+
+# Set language to use during install and the default to use on the installed system
+lang en_US.UTF-8
+
+# Keyboard layouts
+keyboard us
+
+# Configure network information in the installer environment
+network --onboot yes --device eth0 --bootproto dhcp --noipv6
+
+# Root password
+# Use makehash.sh shell script to create a salted sha-512 password.
+# You can also use the following command to create an unsalted password:
+# python -c 'import crypt; print(crypt.crypt("PasswordGoesHere"))'
+#rootpw --plaintext toor
+rootpw --iscrypted $6$KZrZxyds$7ze6cJFCH.FRAcR/b.CMI9qv.ewwnqHdXvF5Th0OoIYkMJz0z1O73DGRV85CVRisHWFkP.tWqI5UPAOmo4kcF.
+
+# User Accounts
+# Use makehash.sh shell script to create sha-512 password
+#user --name=localadmin --groups=wheel --plaintext password
+user --name=localadmin --groups=wheel --iscrypted --password=$6$qPccqMef$iewHR3SkKCOK7vQHVcN0Sh5nqzv724ctGdEclSn2a86r9ycrjpMXPihv/sWi/uZCq/wtmytdjljTv3I6p7VLW.
+
+# Use network installation
+#nfs --server=192.168.3.20 --dir=/nfs_share/rhel7
+url --url="ftp://192.168.3.20/pub/rhel-7.4-media"
+repo --name="ServerExtras" --baseurl="ftp://192.168.3.20/pub/rhel-7-server-rpms"
+repo --name="ThirdParty" --baseurl="ftp://192.168.3.20/pub/third-party-rpms"
+
+# Firewall configuration
+firewall --enabled --ssh
+
+# System authorization information and encryption algorhythm
+auth  --useshadow  --passalgo=sha512
+
+# Use graphical install (default behavior)
+graphical
+# Use text mode install
+#text
+
+# Determines if you get the post-install first boot screen
+firstboot --disable
+
+# SELinux configuration
+selinux --enforcing
+
+# Reboot after installation
+reboot
+
+# System timezone
+timezone America/Chicago
+
+# System bootloader configuration
+# Use grub2-mkpasswd-pbkdf2 to create grub password
+# The default grub username is root
+#bootloader --append="fips=1" --location=mbr --password=toor
+bootloader --append="fips=1" --location=mbr --iscrypted --password=grub.pbkdf2.sha512.10000.D5508C8F89D4227DCF959828AB71D203A84D1186DD03CFF34244526AADE244227F8FACB0E19E704F139BEE788EDADC292748B741BB36843E37ED19337D3C4A76.9B9AF69A73ED223107E848A440FA4EB8918DF70038B50085D552896A82448747AED1FD0E2D57ED616DE74089733F2EC5393AD4C554F61ADF587B0A04786DC9A7
+
+# Clear the Master Boot Record
+zerombr
+
+# Partition clearing information
+clearpart --all --initlabel
+
+# Disk partitioning information
+# Create primary system partitions
+# Current size values are for testing with 16Gb virtual hard drives
+part /boot --asprimary --fstype=xfs --size=512
+
+# Configure swap outside of logical volume
+#part swap --fstype="swap" --recommended
+
+# Create partition for use by Logical Volume
+part pv.01 --size=1 --grow
+
+# Create a Logical Volume Management (LVM) group
+volgroup VolGroup pv.01
+
+# Create Logical Volumes
+logvol / --fstype=xfs --name=lv01 --vgname=VolGroup --size=4096 --grow
+# CCE-26435-8, Ensure /tmp is located on a seperate partition
+logvol /tmp --fstype=xfs --name=lv02 --vgname=VolGroup --size=2048 --fsoptions=nodev,noexec,nosuid
+# CCE-26557-9, Ensure /home is located on a seperate partition
+logvol /home --fstype=xfs --name=lv03 --vgname=VolGroup --size=256 --fsoptions=nodev
+# CCE-26639-5, Ensure /var is located on a seperate partition
+logvol /var --fstype=xfs --name=lv04 --vgname=VolGroup --size=1024 --fsoptions=nodev
+# CCE-26215-4, Ensure /var/log is located on a seperate partition
+logvol /var/log --fstype=xfs --name=lv05 --vgname=VolGroup --size=256 --fsoptions=nodev
+# CCE-26436-6, Ensure /var/log/audit is located on a seperate partition
+logvol /var/log/audit --fstype=xfs --name=lv06 --vgname=VolGroup --size=256 --fsoptions=nodev
+# Configure swap filesystem within Logical Volume
+logvol swap --name=lv_swap --vgname=VolGroup --size=2048
+
+%packages
+@^graphical-server-environment
+# CCE-27024-9: Install AIDE
+aide
+# Install OpenSCAP security configuration and auditing tool
+openscap-scanner
+scap-security-guide
+scap-workbench
+# Install DISA SCAP Compliance Checker (SCC) and STIG Viewer
+# The STIG_Viewer RPM was created locally and includes the Oracle Java dependancy statement,
+# current STIG, current SCC Benchmark, and a RHEL 7 Checklist file
+spawarscc
+STIG_Viewer
+%end # End of %packages secton
+
+%addon com_redhat_kdump --disable
+%end # End of %addon section
+
+# You can list available profiles using the following command, assuming you have
+# the scap-security-guide packcage installed
+# oscap info /usr/share/xml/scap/ssg/content/ssg-rhel7-xccdf.xml
+%addon org_fedora_oscap
+	content-type = scap-security-guide
+	profile = stig-rhel7-disa
+%end # End of %addon section
+
+%pre
+echo "#############################"
+echo "# Running Pre-Configuration #"
+echo "#############################"
+echo ""
+echo "###############################"
+echo "# Completed Pre-Configuration #"
+echo "###############################"
+%end # End of %pre section
+
+%post
+echo "##############################"
+echo "# Running Post-Configuration #"
+echo "##############################"
+echo ""
+echo "################################"
+echo "# Completed Post-Configuration #"
+echo "################################"
+%end # End of %post
+
+# Adding the makehash.sh shell script here in case it doesn't come along with the
+# Kickstart configuration file.
+#
+#!/usr/bin/bash
+##1234567890123456789012345678901234567890123456789012345678901234567890123456789
+#################################################################################
+## makehash.sh
+##
+## Displays a sha-512 (FIPS Complient) password hash for use with
+## a kickstart script (ks.cfg) file.
+##
+## Rob Ramsey 18 Sep 2018
+##
+#################################################################################
+#
+## Check to make sure there are no arguments
+#if [ ! $# = 0 ]
+#	then
+#		echo "Invalid argument"
+#		echo ""
+#		echo "Usage: makehash.sh"
+#		echo "You will be prompted for the cleartext password"
+#		echo ""
+#		exit 1
+#	fi
+#
+## Create a random eight character alphabetical string for use as salt
+#
+#Salt=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 8 | head -n 1)
+#
+## This version of the python code uses randome salt, generated above, and
+## prompts the user for their password
+#
+#echo "Enter your clear text password and press the <Enter> key"
+#python -c "import crypt, getpass, pwd; print(crypt.crypt(raw_input(), '\$6\$${Salt}\$'))"
+#
+#exit 0

@@ -1,0 +1,99 @@
+#1234567890123456789012345678901234567890123456789012345678901234567890123456789
+#################################################################################
+## ks.cfg.vanilla
+##
+## RHEL 7.4 Kickstart installation script that builds clients with a graphical
+## desktop.
+##
+## Rob Ramsey, 15 Oct 2018  
+##
+#################################################################################
+#
+#platform=x86, AMD64, or Intel EM64T
+#version=DEVEL
+# Install OS instead of upgrade
+install
+
+# Set language to use during install and the default to use on the installed system
+#lang en_US
+lang en_US.UTF-8
+
+# Keyboard layouts
+keyboard us
+
+# Root password - Use makehash.sh shell script to create sha-512 password
+rootpw --plaintext toor
+
+# User Accounts
+user --name=localadmin --groups=wheel --plaintext password
+
+# Use network installation
+#nfs --server=192.168.3.20 --dir=/nfs_share/rhel7
+url --url=ftp://192.168.3.20/pub/rhel-7.4-media
+
+# Firewall configuration
+firewall --disabled
+
+# System authorization information
+auth  --useshadow  --passalgo=sha512
+
+# Use graphical install (default behavior)
+graphical
+
+# Use text mode install
+#text
+firstboot --disable
+
+# SELinux configuration
+selinux --disabled
+
+# Reboot after installation
+reboot
+
+# System timezone
+timezone America/Chicago
+
+# System bootloader configuration - Use grub2-mkpasswd-pbkdf2 to create password
+# The default grub username is root
+bootloader --location=mbr --password=toor
+
+# Clear the Master Boot Record
+zerombr
+
+# Partition clearing information
+clearpart --all --initlabel
+
+# Disk partitioning information
+part /boot --asprimary --fstype=xfs --size=1024
+part swap --fstype=swap --recommended
+part pv.01 --size=1 --grow
+volgroup rootvg01 pv.01
+logvol / --fstype xfs --name=lv01 --vgname=rootvg01 --size=1 --grow
+
+%packages
+@^Server with GUI
+#@^graphical-server-environment
+%end # End of %packages secton
+
+%addon com_redhat_kdump --disable
+%end # End of %addon section
+
+%pre
+echo "#############################"
+echo "# Running Pre-Configuration #"
+echo "#############################"
+echo ""
+echo "###############################"
+echo "# Completed Pre-Configuration #"
+echo "###############################"
+%end # End of %pre section
+
+%post
+echo "##############################"
+echo "# Running Post-Configuration #"
+echo "##############################"
+echo ""
+echo "################################"
+echo "# Completed Post-Configuration #"
+echo "################################"
+%end # End of %post

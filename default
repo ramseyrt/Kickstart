@@ -1,0 +1,19 @@
+default menu.c32
+prompt 0
+timeout 300
+ONTIMEOUT local
+
+MENU TITLE Gandalf Kickstart PXE Menu
+
+LABEL 1
+MENU LABEL ^1) Install RHEL 7.4 64Bit (STIG)
+KERNEL /netboot/vmlinuz
+APPEND initrd=/netboot/initrd.img ksdevice=bootif method=ftp://192.168.3.20/pub/rhel-7.4-media ks=ftp://192.168.3.20/pub/rhel-7.4-media/ks.cfg.stig ip=dhcp
+IPAPPEND 2
+
+LABEL 2
+MENU LABEL ^2) Install RHEL 7.4 64Bit (Vanilla)
+KERNEL /netboot/vmlinuz
+APPEND initrd=/netboot/initrd.img ksdevice=bootif method=ftp://192.168.3.20/pub/rhel-7.4-media ks=ftp://192.168.3.20/pub/rhel-7.4-media/ks.cfg.vanilla ip=dhcp
+IPAPPEND 2
+
