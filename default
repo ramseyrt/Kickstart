@@ -1,7 +1,7 @@
 # PXE Boot configuration file
 # Rob Ramsey, 16 Oct 2018
 UI menu.c32
-# Default boot menu option setting
+# Highlighted boot menu option selection setting
 default 4
 prompt 0
 # Timeout is measured in 1/10 of a second
