@@ -6,7 +6,7 @@ default 4
 prompt 0
 # Timeout is measured in 1/10 of a second
 timeout 50
-# On timeout boot menu option specified
+# On timeout, boot menu option specified
 ONTIMEOUT 4
 
 # PXE Boot menu
