@@ -32,7 +32,7 @@ rootpw --iscrypted $6$KZrZxyds$7ze6cJFCH.FRAcR/b.CMI9qv.ewwnqHdXvF5Th0OoIYkMJz0z
 
 # User Accounts
 # Use makehash.sh shell script to create sha-512 password
-#user --name=localadmin --groups=wheel --plaintext password
+#user --name=localadmin --groups=wheel --plaintext --password=password
 user --name=localadmin --groups=wheel --iscrypted --password=$6$qPccqMef$iewHR3SkKCOK7vQHVcN0Sh5nqzv724ctGdEclSn2a86r9ycrjpMXPihv/sWi/uZCq/wtmytdjljTv3I6p7VLW.
 
 # Use network installation
