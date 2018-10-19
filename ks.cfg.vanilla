@@ -24,7 +24,7 @@ keyboard us
 rootpw --plaintext toor
 
 # User Accounts
-user --name=localadmin --groups=wheel --plaintext password
+user --name=localadmin --groups=wheel --plaintext --password=password
 
 # Use network installation
 #nfs --server=192.168.3.20 --dir=/nfs_share/rhel7
