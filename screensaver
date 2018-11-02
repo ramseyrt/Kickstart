@@ -1,0 +1,5 @@
+# /etc/dconf/db/local.d/locks/screensaver
+# Rob Ramsey, 26 Oct 2018
+# Added to prevent users from changing lockout settings
+/org/gnome/desktop/screensaver/lock-enabled
+/org/gnome/desktop/screensaver/lock-delay

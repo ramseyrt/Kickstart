@@ -1,0 +1,8 @@
+# /etc/dconf/db/local.d/locks/session
+# Added per STIG V-73155
+# Rob Ramsey, 26 Oct 2018
+/org/gnome/desktop/screensaver/lock-delay
+# Added per STIG V-73157
+# Rob Ramsey, 26 Oct 2018
+/org/gnome/desktop/session/idle-delay
+

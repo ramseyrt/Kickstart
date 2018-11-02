@@ -1,0 +1,255 @@
+# /etc/audit/audit.rules
+## First rule - delete all
+-D
+
+## Increase the buffers to survive stress events.
+## Make this bigger for busy systems
+-b 8192
+
+## Set failure mode to syslog
+# Configured for 2 per V-72081
+# Rob Ramsey, 30 Oct 2018
+-f 2
+
+# Configured to audit execution of privileged functions per V-72095
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid
+
+# Configured to audit chown syscall per V-72097
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S chown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the fchown syscall per V-72099
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S fchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the lchown syscall per V-72101
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the fchownat syscall per V-72103
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S fchownat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the chmod syscall per V-72105
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S chmod -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the chmod syscall per V-72107
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S fchmod -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the fchmodat syscall per V-72109
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the setxattr syscall per V-72111
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S setxattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the fsetxattr syscall per V-72113
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S fsetxattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the lsetxattr syscall per V-72115
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S lsetxattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the removexattr syscall per V-72117
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S removexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the fremovexattr syscall per V-72119
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the lremovexattr syscall per V-72121
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S lremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod
+
+# Configured to audit the creat syscall per V-72123
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S creat -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the open syscall per V-72125
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S open -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S open -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the openat syscall per V-72127
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S openat -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S openat -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the open_by_handle_at syscall per V-72129
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the open_by_handle_at syscall per V-72129
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S open_by_handle_at -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the truncate syscall per V-72131
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S truncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S truncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the ftruncate syscall per V-72133
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+
+# Configured to audit the semanage command per V-72135
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/semanage -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit the setsebool command per V-72137
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/setsebool -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit the chcon command per V-72139
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/chcon -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit the setfiles command per V-72141
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/setfiles -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit unsuccessful account access events per V-72145
+# Rob Ramsey, 30 Oct 2018
+-w /var/run/faillock -p wa -k logins
+
+# Configured to audit successful account access events per V-72147
+# Rob Ramsey, 30 Oct 2018
+-w /var/log/lastlog -p wa -k logins
+
+# Configured to audit the passwd command per V-72151
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-passwd
+
+# Configured to audit the gpasswd command per V-72153
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-passwd
+
+# Configured to audit the chage command per V-72155
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-passwd
+
+# Configured to audit the userhelper command per V-72157
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-passwd
+
+# Configured to audit the su command per V-72159
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/su -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change 
+
+# Configured to audit the su command per V-72161
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/sudo -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit access to the /etc/sudoers file and files in the /etc/sudoers.d directory per V-72163
+# Rob Ramsey, 30 Oct 2018
+-w /etc/sudoers -p wa -k privileged-actions
+-w /etc/sudoers.d/ -p wa -k privileged-actions
+
+# Configured to audit the newgrp command per V-72165
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/newgrp -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit the chsh command per V-72167
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/chsh -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+# Configured to audit the mount command and syscall per V-72171
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+-a always,exit -F path=/usr/bin/mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+
+# Configured to audit the umount command per V-72173
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/umount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+
+# Configured to audit the postdrop command per V-72175
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/postdrop -F auid>=1000 -F auid!=4294967295 -k privileged-postfix
+
+# Configured to audit the postqueue command per V-72177
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/postqueue -F auid>=1000 -F auid!=4294967295 -k privileged-postfix
+
+# Configured to audit the sys-keysign command per V-72179
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F auid>=1000 -F auid!=4294967295 -k privileged-ssh
+
+# Configured to audit the sys-keysign command per V-72183
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/bin/crontab -F auid>=1000 -F auid!=4294967295 -k privileged-cron
+
+# Configured to audit the pam_timestamp_check command per V-72185
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F path=/usr/sbin/pam_timestamp_check -F auid>=1000 -F auid!=4294967295 -k privileged-pam
+
+# Configured to audit the init_module syscall per V-72187
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S init_module -k module-change
+
+# Configured to audit the delete_module syscall per V-72189
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S delete_module -k module-change
+
+# Configured to audit the kmod command per V-72191
+# Rob Ramsey, 30 Oct 2018
+-w /usr/bin/kmod -p x -F auid!=4294967295 -k module-change
+
+# Configured to audit user account creation, modificaiton, disabling, and termination events per V-72197
+# Rob Ramsey, 30 Oct 2018
+-w /etc/passwd -p wa -k identity
+
+# Configured to audit the rename syscall per V-72199
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S rename -F auid>=1000 -F auid!=4294967295 -k delete
+
+# Configured to audit the renameat syscall per V-72201
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+
+# Configured to audit the rmdir syscall per V-72203
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S rmdir -F auid>=1000 -F auid!=4294967295 -k delete
+
+# Configured to audit the unlink syscall per V-72205
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S unlink -F auid>=1000 -F auid!=4294967295 -k delete
+
+# Configured to audit the unlinkat syscall per V-72207
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S unlinkat -F auid>=1000 -F auid!=4294967295 -k delete
+
+# Configured to audit group account creation, modificaiton, disabling, and termination events per V-72165
+# Rob Ramsey, 30 Oct 2018
+-w /etc/group -p wa -k identity
+
+# Configured to audit gshadow account creation, modificaiton, disabling, and termination events per V-72167
+# Rob Ramsey, 30 Oct 2018
+-w /etc/gshadow -p wa -k identity
+
+# Configured to audit shadow account creation, modificaiton, disabling, and termination events per V-72171
+# Rob Ramsey, 30 Oct 2018
+-w /etc/shadow -p wa -k identity
+
+# Configured to audit opasswd account creation, modificaiton, disabling, and termination events per V-72173
+# Rob Ramsey, 30 Oct 2018
+-w /etc/security/opasswd -p wa -k identity
+
+# Configured to audit the create_module syscall per V-78999
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S create_module -k module-change
+
+# Configured to audit the finit_module syscall per V-79001
+# Rob Ramsey, 30 Oct 2018
+-a always,exit -F arch=b64 -S finit_module -k module-change
+

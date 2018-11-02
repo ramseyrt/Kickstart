@@ -1,0 +1,45 @@
+# /etc/pam.d/system-auth-local
+# Custom password authentication configuration file that will NOT be
+# clobbered by authconfig.  For this config file to take effect,
+# link this file to /etc/pam.d/system-auth with the following syntax:
+# ln -sf /etc/pam.d/system-auth-local /etc/pam.d/system-auth
+# To use the authconfig generated version of this file, re-link using:
+# ln -sf /etc/pam.d/system-auth-ac /etc/pam.d/system-auth
+# Rob Ramsey, 26 Oct 2018
+
+# Configured unlock_time per V-71943
+# Rob Ramsey, 26 Oct 2018
+# Configured even_deny_root per V-71945
+# Rob Ramsey, 26 Oct 2018
+auth        required      pam_faillock.so preauth silent audit deny=3 even_deny_root fail_interval=900 unlock_time=900
+auth        sufficient    pam_unix.so try_first_pass
+auth        [default=die] pam_faillock.so authfail audit deny=3 even_deny_root fail_interval=900 unlock_time=900
+# Removed nullok option per V-71937
+# Rob Ramsey, 26 Oct 2018
+auth        sufficient    pam_unix.so try_first_pass
+auth        requisite     pam_succeed_if.so uid >= 1000 quiet_success
+auth        required      pam_deny.so
+
+# Replaced original line with line from STIG per STIG V-71943
+# Rob Ramsey, 26 Oct 2018
+account     required      pam_faillock.so 
+account     sufficient    pam_localuser.so
+account     sufficient    pam_succeed_if.so uid < 1000 quiet
+account     required      pam_permit.so
+
+password    requisite     pam_pwquality.so try_first_pass local_users_only retry=3 authtok_type=
+# Added sha512 encryption to password option per V-71919
+# Rob Ramsey, 26 Oct 2018
+# Removed nullok option per V-71937
+# Rob Ramsey, 26 Oct 2018
+password    sufficient    pam_unix.so sha512 shadow try_first_pass use_authtok
+password    required      pam_deny.so
+# Added password history option per V-71933
+# Rob Ramsey, 26 Oct 2018
+password    requisite     pam_pwhistory.so use_authtok remember=5 retry=3
+
+session     optional      pam_keyinit.so revoke
+session     required      pam_limits.so
+-session     optional      pam_systemd.so
+session     [success=1 default=ignore] pam_succeed_if.so service in crond quiet use_uid
+session     required      pam_unix.so

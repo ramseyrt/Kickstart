@@ -1,0 +1,17 @@
+# /etc/dconf/db/local.d/00-screensaver
+
+[org/gnome/desktop/session]
+# Configured for STIG V-71893
+# Rob Ramsey, 26 Oct 2018
+idle-delay=uint32 900
+
+[org/gnome/desktop/screensaver]
+# Configured for STIG V-71891
+# Rob Ramsey, 26 Oct 2018
+lock-enabled=true
+# Configured for STIG V-71899
+# Rob Ramsey, 26 Oct 2018
+idle-activation-enabled=true
+# Configured for STIG V-71901
+# Rob Ramsey, 26 Oct 2018
+lock-delay=uint32 5
