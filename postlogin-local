@@ -1,0 +1,14 @@
+# /etc/pam.d/postlogin-local
+# Custom postlogin configuration file that will NOT be
+# clobbered by authconfig. For this config file to take effect,
+# link this file to /etc/pam.d/postlogin with the following syntax:
+# ln -sf /etc/pam.d/postlogin-local /etc/pam.d/postlogin
+# Rob Ramsey, 2 Nov 2018
+
+# Added following line per V-72275
+# Rob Ramsey, 2 Nov 2018
+session     required      pam_lastlog.so showfailed
+
+session     [success=1 default=ignore] pam_succeed_if.so service !~ gdm* service !~ su* quiet
+session     [default=1]   pam_lastlog.so nowtmp showfailed
+session     optional      pam_lastlog.so silent noupdate showfailed
