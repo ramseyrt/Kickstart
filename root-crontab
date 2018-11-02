@@ -1,0 +1,4 @@
+# /var/spool/cron/root
+# Perform baseline assessment once per day
+# Rob Ramsey, 2 Nov 2018
+30 40 * * * /bin/touch /var/log/aide.log && /bin/echo "Aide started at "$(/bin/date) >> /var/log/aide.log && /usr/sbin/aide --check >> /var/log/aide.log
